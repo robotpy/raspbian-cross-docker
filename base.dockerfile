@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN set -xe; \
     apt-get update; \
@@ -13,4 +13,4 @@ RUN set -xe; \
         zip; \
     rm -rf /var/lib/apt/lists/*
 
-RUN curl -SL https://github.com/wpilibsuite/raspbian-toolchain/releases/download/v3.0.0/Raspbian10-Linux-Toolchain-8.3.0.tar.gz | sh -c 'mkdir -p /usr/local && cd /usr/local && tar xzf - --strip-components=1'
+RUN curl -SL https://github.com/wpilibsuite/opensdk/releases/download/v2023-5/armhf-raspi-bullseye-2023-x86_64-linux-gnu-Toolchain-10.2.0.tgz | sh -c 'mkdir -p /usr/local && cd /usr/local && tar xzf - --strip-components=2'
