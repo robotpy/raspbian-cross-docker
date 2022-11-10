@@ -3,6 +3,7 @@ ARG VERSION=invalid-version
 FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base AS pycompile
 
 ENV TARGET_HOST="armv6-bullseye-linux-gnueabihf"
+ENV AC_TARGET_HOST="armv7l-bullseye-linux-gnueabihf"
 ENV BUILD_HOST="x86_64"
 ENV WORKING_DIRECTORY="/build"
 ENV INSTALL_DIRECTORY="/build/crosspy"
@@ -49,7 +50,7 @@ RUN set -xe; \
     cd $WORKING_DIRECTORY;cd $SOURCE_DIRECTORY; make distclean; \
     ./configure --host=$TARGET_HOST --build=$BUILD_HOST --prefix=$PREFIX \
         --disable-ipv6 --enable-unicode=ucs4 \
-        ac_cv_host=armv6-bullseye-linux-gnueabihf \
+        ac_cv_host=$AC_TARGET_HOST \
         ac_cv_buggy_getaddrinfo=no \
         ac_cv_file__dev_ptmx=no ac_cv_file__dev_ptc=no \
         ac_cv_have_long_long_format=yes \
