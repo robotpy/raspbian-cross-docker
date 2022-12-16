@@ -1,13 +1,13 @@
 
 ARG VERSION=invalid-version
-FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base AS pycompile
+FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base-arm32 AS pycompile
 
 ENV TARGET_HOST="armv6-bullseye-linux-gnueabihf"
 ENV AC_TARGET_HOST="armv7l-bullseye-linux-gnueabihf"
 ENV BUILD_HOST="x86_64"
 ENV WORKING_DIRECTORY="/build"
 ENV INSTALL_DIRECTORY="/build/crosspy"
-ENV PYTHON_VERSION="3.9.15"
+ENV PYTHON_VERSION="3.9.16"
 ENV SOURCE_DIRECTORY="Python-$PYTHON_VERSION"
 ENV PYTHON_ARCHIVE="Python-$PYTHON_VERSION.tar.xz"
 ENV PREFIX="$INSTALL_DIRECTORY"
@@ -64,7 +64,7 @@ RUN set -xe; \
 # Minimal cross-compilation environment
 #
 
-FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base AS crossenv
+FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base-arm32 AS crossenv
 
 RUN set -xe; \
     apt-get update; \

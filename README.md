@@ -15,7 +15,7 @@ Build the container
 If you want to just download our docker image from docker hub, you can skip
 this step. This step will take a *long* time.
 
-    $ make image
+    $ make all
 
 Use the container
 -----------------
@@ -23,7 +23,8 @@ Use the container
 Run the docker image (note that we map the current directory to the `/v`
 directory):
 
-    $ docker run --rm -it -v $(pwd):/v robotpy/raspbian-cross-ubuntu:2023.1
+    $ docker run --rm -it -v $(pwd):/v robotpy/raspbian-cross-ubuntu:2023.3-arm32
+    $ docker run --rm -it -v $(pwd):/v robotpy/raspbian-cross-ubuntu:2023.3-aarch64
 
 Once you're in the container, source the virtual environment and you can now
 cross-compile python packages!
