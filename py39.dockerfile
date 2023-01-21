@@ -1,9 +1,14 @@
 
 ARG VERSION=invalid-version
-FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base-aarch64 AS pycompile
+ARG ARCH=invalid-arch
 
-ENV TARGET_HOST="aarch64-bullseye-linux-gnu"
-ENV AC_TARGET_HOST="aarch64-bullseye-linux-gnu"
+FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base-${ARCH} AS pycompile
+
+ARG TARGET_HOST=invalid-target-host
+ARG AC_TARGET_HOST=invalid-ac-target-host
+
+ENV TARGET_HOST=${TARGET_HOST}
+ENV AC_TARGET_HOST=${AC_TARGET_HOST}
 ENV BUILD_HOST="x86_64"
 ENV WORKING_DIRECTORY="/build"
 ENV INSTALL_DIRECTORY="/build/crosspy"
@@ -64,7 +69,7 @@ RUN set -xe; \
 # Minimal cross-compilation environment
 #
 
-FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base-aarch64 AS crossenv
+FROM robotpy/raspbian-cross-ubuntu:${VERSION}-base-${ARCH} AS crossenv
 
 RUN set -xe; \
     apt-get update; \
@@ -76,14 +81,17 @@ RUN set -xe; \
 COPY --from=pycompile /usr/local /usr/local
 COPY --from=pycompile /build/crosspy /build/crosspy
 
+ARG ARCH=invalid-arch
+ARG TARGET_HOST=invalid-target-host
+
 RUN set -xe; \
     ldconfig; \
-    python3.9 -m pip install crossenv; \
-    python3.9 -m crossenv /build/crosspy/bin/python3.9 /build/venv --sysroot=$(aarch64-bullseye-linux-gnu-gcc -print-sysroot) --env UNIXCONFDIR=/build/venv/cross/etc; \
+    python3.9 -m pip install crossenv==1.4.0; \
+    python3.9 -m crossenv /build/crosspy/bin/python3.9 /build/venv --sysroot=$(${TARGET_HOST}-gcc -print-sysroot) --env UNIXCONFDIR=/build/venv/cross/etc; \
     /build/venv/bin/build-pip install 'setuptools==63.4.3'; \
     /build/venv/bin/cross-pip install wheel 'setuptools==63.4.3';
 
-COPY pip-aarch64.conf /build/venv/cross/pip.conf
+COPY pip-${ARCH}.conf /build/venv/cross/pip.conf
 COPY os-release /build/venv/cross/etc/os-release
 
 ENV RPYBUILD_PARALLEL=1
